@@ -3,20 +3,25 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.util.Random;
 import javax.swing.*;
-import java.util.Arrays;
 
 public class MainGame extends JPanel implements ActionListener, KeyListener {
   int width;
   int height;
   Timer gameloop;
-
   Player player;
   ImageIcon floorIcon = new ImageIcon("pl/floor.png");
   Image floorImg = floorIcon.getImage();
   Tile floor;
   BufferedImage map;
-
+  Enemy enemy;
+  Random random=new Random();
+  Coin coin;
+  int score=0;
+  JLabel scoretext;
+  JLabel gameover=new JLabel();
+  
   int velocity = 50;
+  
 
   // create panel by constructor
   MainGame(int width, int height) {
@@ -27,11 +32,37 @@ public class MainGame extends JPanel implements ActionListener, KeyListener {
     setBackground(Color.BLACK);
     addKeyListener(this);
     setFocusable(true);
-    gameloop = new Timer(33, this);
+    //start gameloop
+    gameloop = new Timer(16, this);
     gameloop.start();
+
     player = new Player(5 * Tile.Tile_size, 5 * Tile.Tile_size);
+    enemy = new Enemy(random.nextInt(width-Tile.Tile_size),random.nextInt(height-Tile.Tile_size));
     floor = new Tile(floorImg, 0, 0);
+    coin=new Coin(random.nextInt(width-Tile.Tile_size),random.nextInt(height-Tile.Tile_size));
+
+     //make game over Label  
+     gameover.setText("Game Over \n your score is "+score);
+     gameover.setForeground(Color.RED);
+     gameover.setBounds(500,300,1000,1000);
+     gameover.setFont(new Font("FiraCode Neard Font",Font.BOLD,50));
+
+     
+    
+    
+    
+    
+    
+    //make Score Label
+    scoretext=new JLabel("Score : "+score);
+    scoretext.setForeground(Color.RED);
+    scoretext.setBounds(width-200,10,300,50);
+    scoretext.setFont(new Font("FiraCode Neard Font",Font.BOLD,30));
+    setLayout(null);
+    add(scoretext);
+    //create Map
     createMap();
+    
 
   }
 
@@ -51,6 +82,18 @@ public class MainGame extends JPanel implements ActionListener, KeyListener {
     // draw Player
     g.drawImage(player.playerImg, player.x, player.y, this);
 
+    //draw Enemy 
+    g.drawImage(enemy.enemyImg,enemy.x,enemy.y,this);
+   
+    //draw Coin
+    
+      g.drawImage(coin.coinImg,coin.x,coin.y,this);
+
+    //draw player HP
+    g.setColor(Color.RED);
+    g.fillRect(0, 0,300,30);
+    g.setColor(Color.GREEN);
+    g.fillRect(0, 0,player.hp,30);
   }
 
   // create Map
@@ -115,7 +158,30 @@ public class MainGame extends JPanel implements ActionListener, KeyListener {
   // manage event and gameloop
   @Override
   public void actionPerformed(ActionEvent e) {
-
+    //check collision player with enemey 
+   if(Tile.colliderRect(player,enemy)){
+    player.hp-=1;
+    System.out.println("colliderect!");
+   }
+   //check collision player with coin
+   if(Tile.colliderRect(player, coin)){
+    score++;
+    scoretext.setText("Score : "+score);
+    coin = new Coin(random.nextInt(width - Tile.Tile_size), random.nextInt(height - Tile.Tile_size));
+    enemy.Evelocity+=1;
+    System.out.printf(" score is %d velocity of enemy  %d \n" ,score,enemy.Evelocity);
+    
+   }
+  //enemy follow the player
+        enemy.Enemy_move(player.x, player.y);
+  
+  //game over condition
+  if(player.hp<=0){
+    gameloop.stop();
+    setFocusable(false);
+    add(gameover);
+    
+  }
     repaint();
 
   }
