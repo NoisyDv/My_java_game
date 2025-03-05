@@ -1,11 +1,10 @@
 
-
 import javax.swing.*;
 
 public class App {
   public static void main(String[] args) {
-    int window_height = 800;
-    int window_width = 800;
+    int window_height = 1000;
+    int window_width = 1400;
     JFrame window = new JFrame("Game");
     window.setSize(window_width, window_height);
     window.setLocationRelativeTo(null);
@@ -15,7 +14,7 @@ public class App {
     MainGame game = new MainGame(window_width, window_height);
     window.add(game);
     window.pack();
-    game.requestFocus(); 
+    game.requestFocus();
   }
 
 }
