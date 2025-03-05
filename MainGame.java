@@ -19,6 +19,8 @@ public class MainGame extends JPanel implements ActionListener, KeyListener {
   int score=0;
   JLabel scoretext;
   JLabel gameover=new JLabel();
+  JButton play_again=new JButton("Play Again");
+
   
   int velocity = 50;
   
@@ -44,10 +46,12 @@ public class MainGame extends JPanel implements ActionListener, KeyListener {
      //make game over Label  
      gameover.setText("Game Over \n your score is "+score);
      gameover.setForeground(Color.RED);
-     gameover.setBounds(500,300,1000,1000);
-     gameover.setFont(new Font("FiraCode Neard Font",Font.BOLD,50));
+     gameover.setBounds(450,250,500,500);
+     gameover.setFont(new Font("FiraCode Neard Font",Font.BOLD,32));
 
-     
+    //play again button   
+    play_again.setBounds(400,500,100,80);
+    play_again.addActionListener(this);
     
     
     
@@ -180,7 +184,29 @@ public class MainGame extends JPanel implements ActionListener, KeyListener {
     gameloop.stop();
     setFocusable(false);
     add(gameover);
+    add(play_again);
     
+  }
+  //game restart 
+  if(e.getSource()==play_again){
+    remove(gameover);
+    remove(play_again);
+    score=0;
+    enemy.Evelocity=1;
+    scoretext.setText("Score: "+score);
+    player.hp=1;
+    velocity=50;
+    player.x=random.nextInt(width-Tile.Tile_size);
+    player.y=random.nextInt(height-Tile.Tile_size);
+    enemy.x=random.nextInt(width-Tile.Tile_size);
+    enemy.y=random.nextInt(height-Tile.Tile_size);
+  coin = new Coin(random.nextInt(width - Tile.Tile_size), random.nextInt(height - Tile.Tile_size)); 
+    setFocusable(true);
+    requestFocusInWindow();
+    gameloop.start();
+    
+    
+
   }
     repaint();
 
