@@ -1,4 +1,5 @@
 
+
 import javax.swing.*;
 
 public class App {
@@ -14,6 +15,7 @@ public class App {
     MainGame game = new MainGame(window_width, window_height);
     window.add(game);
     window.pack();
+    game.requestFocus(); 
   }
 
 }
