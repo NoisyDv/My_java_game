@@ -50,7 +50,7 @@ public class MainGame extends JPanel implements ActionListener, KeyListener {
      gameover.setFont(new Font("FiraCode Neard Font",Font.BOLD,32));
 
     //play again button   
-    play_again.setBounds(400,500,100,80);
+    play_again.setBounds(580,540,100,80);
     play_again.addActionListener(this);
     
     
@@ -164,7 +164,7 @@ public class MainGame extends JPanel implements ActionListener, KeyListener {
   public void actionPerformed(ActionEvent e) {
     //check collision player with enemey 
    if(Tile.colliderRect(player,enemy)){
-    player.hp-=1;
+    player.hp-=10;
     System.out.println("colliderect!");
    }
    //check collision player with coin
@@ -182,6 +182,7 @@ public class MainGame extends JPanel implements ActionListener, KeyListener {
   //game over condition
   if(player.hp<=0){
     gameloop.stop();
+    gameover.setText("Game Over \n your score is "+score);
     setFocusable(false);
     add(gameover);
     add(play_again);
@@ -194,7 +195,7 @@ public class MainGame extends JPanel implements ActionListener, KeyListener {
     score=0;
     enemy.Evelocity=1;
     scoretext.setText("Score: "+score);
-    player.hp=1;
+    player.hp=300;
     velocity=50;
     player.x=random.nextInt(width-Tile.Tile_size);
     player.y=random.nextInt(height-Tile.Tile_size);
